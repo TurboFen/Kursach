@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a64e5b0e436d4bed9780211ae245f7b, type: 3}
+  m_Name: DoorC2_Data
+  m_EditorClassIdentifier: 
+  dataName: DoorC2
+  dragonBonesJSON: {fileID: 4900000, guid: 5c4d69ee64256264a864037463f76b4a, type: 3}
+  textureAtlas:
+  - textureAtlasJSON: {fileID: 4900000, guid: f6dab5c8ed38b9e4aa9f29b51b2aadf0, type: 3}
+    texture: {fileID: 2800000, guid: 3e91148e7207fd64ca58559f1f448c6c, type: 3}
+    material: {fileID: 2100000, guid: 1a4fa73362ea7a64085aaaacbf9d3513, type: 2}
+    uiMaterial: {fileID: 0}

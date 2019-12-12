@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Toys
+  - InteractableObj
+  - Babyshka
+  - BackGround
+  - Spalny
+  - Stolovaya
+  - Igrovaya
+  - Hide
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Backgrounds
+    uniqueID: 1466896491
+    locked: 0
+  - name: Furniture
+    uniqueID: 4121921403
+    locked: 0
+  - name: Tools
+    uniqueID: 4250219513
+    locked: 0
+  - name: Boy
+    uniqueID: 4009536879
+    locked: 0
