@@ -7,20 +7,18 @@ public class Inventory2 : MonoBehaviour
 {
     public GameObject[] inventory = new GameObject[5];
     public Button[] InventoryButtons = new Button[5];
-    //Function to add item to inventory
+    //Добавление в инвентраь
     public void AddItem(GameObject item)
     {
         bool itemAdded = false;
-//Find the first open slit in the innventory
+//Поиск пустой ячейки
 for (int index = 0; index < inventory.Length; index++)
         {
             if (inventory [index] == null)
             {
                 inventory[index] = item;
                 InventoryButtons[index].image.overrideSprite = item.GetComponent<SpriteRenderer>().sprite;
-                print("Added item to inventory!");
                 itemAdded = true;
-                //Do something with the object
                 item.SendMessage("DoInteraction");
                 break;
             }
@@ -28,7 +26,7 @@ for (int index = 0; index < inventory.Length; index++)
         //Inventory full
         if (!itemAdded)
         {
-            print("Inventory is full and we can't add a new Item");
+            print("Инвентарь переполнен");
         }
     }
     public bool FindItem(GameObject item)
@@ -49,7 +47,6 @@ for (int index = 0; index < inventory.Length; index++)
             if (inventory[index] == item)
             {
                 inventory[index] = null;
-                Debug.Log("We deleted a used item from inventory");
                 InventoryButtons[index].image.overrideSprite = null;
                 break;
             }

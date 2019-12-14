@@ -13,64 +13,94 @@ public class BoyMove : MonoBehaviour
     private bool isFacingRight = true;
     public bool is_game_over = false;
    PlayerInteract PlInt;
+   private float timeSinceLastTab;
+    private Vector2 first_speed;
+    public bool is_fast=false;
+    private const float DOUBLE_TIME = .2f;
+    private float LAstTabTime;
+    
     void Start()
     {
-        PlInt = gameObject.GetComponent<PlayerInteract>();
-        rb = GetComponent<Rigidbody2D>();
-        // UnityFactory.factory.LoadDragonBonesData("Animation/Boy_ske");
-        // UnityFactory.factory.LoadDragonBonesData("Animation/Boy_tex");
-        //  armComp = GetComponent<UnityArmatureComponent>();
-        //this.GetComponent<UnityArmatureComponent>().animation.Play("stop");
-        armComp.animation.Play("stop",0);
+            PlInt = gameObject.GetComponent<PlayerInteract>();
+            rb = GetComponent<Rigidbody2D>();
+            first_speed = speed;
+            armComp.animation.Play("stop", 0);
     }
 
      void Update()
     {
-        if (!is_game_over)
-        {
-             if (!PlInt.stop_boy) { 
-            float inputX = Input.GetAxis("Horizontal");
-            float inputY = Input.GetAxis("Vertical");
+       
+            if (!is_game_over)
+            {
+                if (!PlInt.stop_boy)
+                {
+                    if (Input.GetButtonDown("Horizontal")) { timeSinceLastTab = Time.time - LAstTabTime; }
 
-            if (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical"))
-            {
-                armComp.animation.Play("walk", 0);
+                if (Input.GetButtonUp("Horizontal"))
+                {
+                    speed = first_speed;
+                    is_fast = false;
+                    timeSinceLastTab = 1;
+                }
+            
+                    if (GetOfGameObj.get() == 3 && (timeSinceLastTab <= DOUBLE_TIME))
+                    {
+                        Debug.Log("Time Les" + timeSinceLastTab);
+                        Debug.Log("Time more" + DOUBLE_TIME);
+                        speed = new Vector2(2, 1.5f);
+                        is_fast = true;
+                    }
+                    else
+                    {
+                        Debug.Log("Sped doesn't change");
+                        speed = first_speed;
+                        is_fast = false;
+                    }
+
+                    float inputX = Input.GetAxis("Horizontal");
+                    float inputY = Input.GetAxis("Vertical");
+
+                    if (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical"))
+                    {
+                        armComp.animation.Play("walk", 0);
+                        LAstTabTime = Time.time;
+                    }
+                    if ((Input.GetButtonUp("Horizontal") && (!Input.GetButtonDown("Vertical") && !Input.GetButton("Vertical") && !Input.GetButton("Horizontal"))) || (Input.GetButtonUp("Vertical") && (!Input.GetButton("Horizontal") && !Input.GetButtonDown("Horizontal") && !Input.GetButton("Vertical"))))
+                    {
+                        armComp.animation.Play("stop", 0);
+                    }
+
+                    movement = new Vector2(
+                  speed.x * inputX,
+                  speed.y * inputY);
+                    if (inputX > 0 && !isFacingRight)
+                        //отражаем персонажа вправо
+                        Flip();
+                    //обратная ситуация. отражаем персонажа влево
+                    else if (inputX < 0 && isFacingRight)
+                        Flip();
+                    movement = new Vector2(speed.x * inputX, speed.y * inputY);
+                }
+                else
+                {
+                    movement = new Vector2(0, 0);
+                }
             }
-            if ((Input.GetButtonUp("Horizontal") && (!Input.GetButtonDown("Vertical") && !Input.GetButton("Vertical") && !Input.GetButton("Horizontal"))) || (Input.GetButtonUp("Vertical") && (!Input.GetButton("Horizontal") && !Input.GetButtonDown("Horizontal") && !Input.GetButton("Vertical"))))
-            {
-                armComp.animation.Play("stop", 0);
-            }
-            movement = new Vector2(
-          speed.x * inputX,
-          speed.y * inputY);
-            if (inputX > 0 && !isFacingRight)
-                //отражаем персонажа вправо
-                Flip();
-            //обратная ситуация. отражаем персонажа влево
-            else if (inputX < 0 && isFacingRight)
-                Flip();
-            //  float inputY = Input.GetAxis("Vertical"); speed.y * inputY
-            movement = new Vector2(speed.x * inputX, speed.y * inputY);
-        }
             else
             {
                 movement = new Vector2(0, 0);
+                rb.velocity = movement;
+                armComp.animation.Stop("stop");
+                armComp.animation.Stop("walk");
+                if (!armComp.animation.isPlaying)
+                {
+
+                    armComp.animation.Play("cry");
+                }
+
+                Invoke("Lose", 2f);
             }
-        }
-        else
-        {
-            movement = new Vector2(0, 0);
-            rb.velocity = movement;
-            armComp.animation.Stop("stop");
-            armComp.animation.Stop("walk");
-            if (!armComp.animation.isPlaying)
-            {
-               
-                armComp.animation.Play("cry");
-            }
-           
-            Invoke("Lose", 2f);
-        }
+        
     }
     void Flip()
     {

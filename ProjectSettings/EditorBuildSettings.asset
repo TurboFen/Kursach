@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Prefabs/Scenes/lvl2.unity
     guid: 8fb965727b49b004b9a5311d2db94ddc
   - enabled: 1
+    path: Assets/Prefabs/Scenes/lvl3.unity
+    guid: 5c811086d2d73a545827e644db254293
+  - enabled: 1
     path: Assets/Prefabs/Scenes/GameOver.unity
     guid: f04e16e96b9082f4a814b8ccc0c261a8
   - enabled: 1

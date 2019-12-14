@@ -9,6 +9,5 @@ public class Lose : MonoBehaviour
     void Start()
     {
         armComp.animation.Play("cry");
-    }
-    
+    } 
 }

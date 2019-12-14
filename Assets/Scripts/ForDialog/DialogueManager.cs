@@ -12,15 +12,20 @@ public class DialogueManager : MonoBehaviour
     public Button ButSkip;
     public Button ButtNext;
     public Button ButLearn;
-    //public bool first_sc;
-        //
+    public DialogueTrigger dt;
     public Text DialogueText; //переменная с самим окошком текст (где будет текст)
-    public Animator animator; //ну анимация
+    public Animator animator;
     void Start()
     {
         sentences = new Queue<string>();
+        if (GetOfGameObj.get() == 3)
+        {
+            dt.TriggerDialogue();
+        }
+
     }
     public void StartDialogue(Dialogue dialogue) {
+       
         sentences.Clear();
         animator.SetBool("IsOpen", true);
         foreach(string sentence in dialogue.sentences)
@@ -33,7 +38,6 @@ public class DialogueManager : MonoBehaviour
    public void Start_help(string sentence)
     {
         animator.SetBool("IsOpen", true);
-        //help = sentence;
         DialogueText.text = sentence;
        
     }
@@ -46,23 +50,8 @@ public class DialogueManager : MonoBehaviour
             return;
         }
         string sentence = sentences.Dequeue();
-
-        //
         DialogueText.text = sentence;
-
-        //
-        //StopAllCoroutines();
-        //StartCoroutine(TypeSentence(sentence));
     }
-    //IEnumerator TypeSentence(string sentence)
-    //{
-    //    DialogueText.text = "";
-    //    foreach(char letter in sentence.ToCharArray())
-    //    {
-    //        DialogueText.text += letter;
-    //        yield return null;
-    //    }
-    //}
     public void EndDialogue()
     {
         if (GetOfGameObj.get() == 1)
@@ -75,10 +64,8 @@ public class DialogueManager : MonoBehaviour
         else
         {
             animator.SetBool("IsOpen", false);
-          
+
         }
-        //я добавляю свое
-       // Start_help("");
     }
 
 }

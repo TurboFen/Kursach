@@ -12,28 +12,5 @@ public  class FindOfIndexScence :MonoBehaviour
         GetOfGameObj.set(index);
         FindOfIndexScenceNext.set_next(next_index);
     }
-    
-    //public int index;
-    //void Start()
-    //{
-    //    Debug.Log("First"+index.ToString());
-    //    DontDestroyOnLoad(this);
-    //}
-
-    //public void Restart()
-    //{
-    //    Debug.Log(index.ToString());
-    //    SceneManager.LoadScene(index);
-    //}
-    //// void Start()
-    ////{
-    ////    NeedScence(); 
-    ////}
-    ////public  void NeedScence()
-    ////{
-    ////    int index;
-    ////    index = SceneManager.GetActiveScene().buildIndex;
-    ////    DontDestroyOnLoad(this);
-    ////}
 
 }

@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class menu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public void PlayGame()
+    public Canvas selectLv; 
+    public void OpenSelectLvl()
     {
-        SceneManager.LoadScene("SelectLvl");
-    }
+        selectLv.gameObject.SetActive(true);
 
-    // Update is called once per frame
+    }
+    public void CloseSelectLvl()
+    {
+        selectLv.gameObject.SetActive(false);
+    }
     public void QuitGame()
     {
         Application.Quit();

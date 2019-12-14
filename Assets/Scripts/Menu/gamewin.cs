@@ -17,14 +17,10 @@ public class gamewin : MonoBehaviour
             instance = this;
         }
 
-        // sceneIndex = SceneManager.GetActiveScene().buildIndex; //возможно ошибка
         sceneIndex = GetOfGameObj.get();
         if (corrent_level!=0) {
             levelComplete = PlayerPrefs.GetInt("LevelComplete");
-           // PlayerPrefs.SetInt("LevelComplete", sceneIndex);
         }
-       
-      // levelComplete = PlayerPrefs.GetInt("LevelComplete");
     }
     
     public void isEndGame()
@@ -40,19 +36,6 @@ public class gamewin : MonoBehaviour
         {
             Invoke("NextLvl", 2f);
         }
-        
-        //if(sceneIndex == 2)
-        //{
-        //    Invoke("LoadMainMenu", 2f);
-        //}
-        //else 
-        //        {
-        //    if(levelComplete < sceneIndex)
-        //    {
-        //        PlayerPrefs.SetInt("LevelComplete", sceneIndex);
-        //    }
-        //    Invoke("NextLvl", 2f);
-        //}
     }
     public void LoadMainMenu()
     {

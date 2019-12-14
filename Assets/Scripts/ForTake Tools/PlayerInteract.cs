@@ -28,7 +28,6 @@ public class PlayerInteract : MonoBehaviour
         {
             if (Time.time <= last_time)
             {
-                Debug.Log("I need time to take");
                 if (armComp.animation.isPlaying)
                 {
                     armComp.animation.Stop("stop");
@@ -39,7 +38,6 @@ public class PlayerInteract : MonoBehaviour
             }
             else
             {
-                // armComp.animation.Stop("makeSMT");
                 stop_boy = false;
                 armComp.animation.Play("stop");
                 if (currentInterObjScript.inventory)
@@ -49,14 +47,9 @@ public class PlayerInteract : MonoBehaviour
                 else
                 {
                     currentInterObjScript.isAlreadyUsed = true;
-                    print("The tool is changed");
                     currentInterObjScript.changed();
                     inventory.RemoveItem(currentInterObjScript.ItemNeeded);
                 }
-                //speak.Start_help("Я взял это!");
-
-
-                print("I Taake it!");
                 flag = false;
             }
         }
@@ -64,9 +57,7 @@ public class PlayerInteract : MonoBehaviour
         {
             if (!currentInterObjScript.hide)
             {
-
-                //Check if this object is to be store in inventory
-                if (currentInterObjScript.inventory)//If this obj add to inv
+                if (currentInterObjScript.inventory)
                 {
                     if (!flag)
                     {
@@ -75,11 +66,8 @@ public class PlayerInteract : MonoBehaviour
                     }
                 }
 
-                // Check is this objeck already used
                 if (!currentInterObjScript.isAlreadyUsed && !currentInterObjScript.inventory)
                 {
-                    // Check to see if we had a needed object to make something
-                    //Search our inventory for an needed  item - if found make smt
                     if (inventory.FindItem(currentInterObjScript.ItemNeeded))
                     {
                         if (!flag)
@@ -87,21 +75,14 @@ public class PlayerInteract : MonoBehaviour
                             last_time = Time.time + 0.5f;
                             flag = true;
                         }
-                        //We found a needed item and use it
-                        //currentInterObjScript.isAlreadyUsed = true;
-                        //print("The tool is changed");
-                        //currentInterObjScript.changed();
-                        //inventory.RemoveItem(currentInterObjScript.ItemNeeded);
                     }
                     else
                     {
                         if (currentInterObjScript.have_message)
                         {
                             currentInterObjScript.say();
-                            message = "We don't have a special tool to use";
+                            message = "У нас нет специального предмета для взаимодействия";
                             StartCoroutine(Sometime(message));
-                           // FindObjectOfType<DialogueManager>().Start_help("We don't have a special tool to use");
-                            print("We don't have a special tool to use");
                         }
 
                     }
@@ -111,17 +92,15 @@ public class PlayerInteract : MonoBehaviour
                     //IIs alredy used
                     if (!currentInterObjScript.inventory)
                     {
-                        message = "We have already changed it!";
+                        message = "Мы уже испортили его!";
                         StartCoroutine(Sometime(message));
-                        print("We have already changed it!");
                     }
                 }
             }
             else
             {
-               // isHide = false;
+                //Мальчик спрятался
 gameObject.SetActive(false);
-                Debug.Log("Boy is hide");
             }
         }
     }
@@ -129,23 +108,20 @@ gameObject.SetActive(false);
     {
         if (other.tag == "InteractableObj") 
         {
-           // speak.Start_help("I can take it or use");
-            print("I am near of it");
             currentIntObj = other.gameObject;
             currentInterObjScript = currentIntObj.GetComponent<InteractionObject>();
             if (currentInterObjScript.hide)
             {
-                speak.Start_help("I can hide here");
+                speak.Start_help("Я могу здесь спрятаться");
             }
             if (currentInterObjScript.inventory)
             {
-                speak.Start_help("I can take it to inventory and use later");
+                speak.Start_help("Я могу взять это и использовать позже");
             }
             if(!currentInterObjScript.inventory && !currentInterObjScript.hide)
             {
-                speak.Start_help("I can make something with it");
+                speak.Start_help("Я могу как-то подпортить это");
             }
-          //  Debug.Log(other.name);
         }
     }
     void OnTriggerExit2D(Collider2D collision)

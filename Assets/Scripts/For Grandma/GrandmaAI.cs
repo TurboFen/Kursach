@@ -44,7 +44,8 @@ public class GrandmaAI : MonoBehaviour
     private string Timer_sec;
     private string Timer_min;
     public Text Last_time;
-    private bool Game_over=false;
+    public bool Game_over=false;
+   
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "InteractableObj")
@@ -93,182 +94,161 @@ public class GrandmaAI : MonoBehaviour
     }
     void Start()
     {
-        Time_Update(Time_Game);
-        mood.sprite = grandmaMood[0];
-        rage = 0;
-        currentPatrolPoint = patrolPoints[currentPatrolIndex];
-        AUdio = GetComponent<AudioSource>();
+        
+            Time_Update(Time_Game);
+            mood.sprite = grandmaMood[0];
+            rage = 0;
+            currentPatrolPoint = patrolPoints[currentPatrolIndex];
+            AUdio = GetComponent<AudioSource>();
 
-        if (currentPatrolPoint.position.x < transform.position.x)
-        {
-            Flip();
-          //  speed = -speed;
-        }
-        else
-        {
-            speed =speed;
-        }
-        armComp.animation.Play("WalkGrandma");
-        flag_move = false;
-        flag_angry = false;
+            if (currentPatrolPoint.position.x < transform.position.x)
+            {
+                Flip();
+            }
+            else
+            {
+                speed = speed;
+            }
+            armComp.animation.Play("WalkGrandma");
+            flag_move = false;
+            flag_angry = false;
+        
+       
     }
     void Update()
     {
-        if (!Game_over) { 
-            Time_Game -= Time.deltaTime;
-        Time_Update(Time_Game);
+       
+            if (!Game_over)
+            {
+                Time_Game -= Time.deltaTime;
+                Time_Update(Time_Game);
 
-        if (trys)
-        {
+                if (trys)
+                {
+                    if (armComp.animation.isPlaying)
+                    {
+                        armComp.animation.Stop("MakeSmtGrandma");
+                        armComp.animation.Stop("WalkGrandma");
+                    }
+                    boy = for_boy.GetComponent<BoyMove>();
+                    if (!armComp.animation.isPlaying)
+                    {
+                        //КОНЕЦ ИГРЫ - ВЫ ПРОИГРАЛИ
+
+                        armComp.animation.Play("AngryGrandma");
+                        AUdio.PlayOneShot(voice[0]);
+                    }
+                    boy.is_game_over = true;
+
+                }
+                else
+                {
+                    if (Vector3.Distance(transform.position, currentPatrolPoint.position) < .35f)
+                    {
+                        if (currentInterObjScript.isAlreadyUsed && !currentInterObjScript.isAlreadyCheck && currentIntObj != null)
+                        {
+                            if (!flag_angry)
+                            {
+                              //Здесь она увидит испорченную вещь
+                                rage++;
+                                rage_slider.value = rage / maxRage;
+                                if (count_of_mood == 4) { count_of_mood = 3; }
+                                mood.sprite = grandmaMood[count_of_mood];
+                                count_of_mood++;
+                                last_time = Time.time + 4;
+                                if (rage == maxRage)
+                                { //КОНЕЦ ИГРЫ - ВЫ ВЫИГРАЛИ}
+
+                                    gamewin.instance.isEndGame();
+                                    Invoke("Win", 2f);
+                                }
+
+                            }
+                            if (Time.time <= last_time)
+                            {
+                                if (armComp.animation.isPlaying)
+                                {
+                                    armComp.animation.Stop("MakeSmtGrandma");
+                                    armComp.animation.Stop("WalkGrandma");
+                                }
+                                if (!armComp.animation.isPlaying)
+                                {
+
+                                    armComp.animation.Play("AngryGrandma");
+                                    AUdio.PlayOneShot(voice[0]);
+                                }
+                                flag_angry = true;
+                            }
+                            else
+                            {
+                                AUdio.PlayOneShot(voice[1]);
+                                currentInterObjScript.isAlreadyCheck = true;
+                                currentInterObjScript.changed();
+                                flag_angry = false;
+                            }
+                        }
+                        else
+                        {
+                            if (flag_move == false)
+                            {
+                                last_time = Time.time + 4;
+                            }
+                            if (Time.time <= last_time)
+                            {
+                                if (armComp.animation.isPlaying)
+                                {
+                                    armComp.animation.Stop("AngryGrandma");
+                                    armComp.animation.Stop("WalkGrandma");
+                                }
+                                if (!armComp.animation.isPlaying)
+                                {
+                                    armComp.animation.Play("MakeSmtGrandma");
+                                }
+                                flag_move = true;
+
+                            }
+                            else
+                            {
+                                flag_move = false;
+                                armComp.animation.Play("WalkGrandma");
+                                GoToAnotherPatrol();
+                                Flip();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                    }
+                }
+
+            }
+            else
+            { //Здесь будет игра окончена
             if (armComp.animation.isPlaying)
             {
                 armComp.animation.Stop("MakeSmtGrandma");
                 armComp.animation.Stop("WalkGrandma");
             }
-            boy = for_boy.GetComponent<BoyMove>();
-            Debug.Log("End_Of_Gaaaame");
             if (!armComp.animation.isPlaying)
             {
-                //КОНЕЦ ИГРЫ - ВЫ ПРОИГРАЛИ
 
                 armComp.animation.Play("AngryGrandma");
-                AUdio.PlayOneShot(voice[0]);
-                   
-                   // SceneManager.LoadScene("GameOver");
-                }
-            boy.is_game_over = true;
-               
             }
-        else
-        {
-            if (Vector3.Distance(transform.position, currentPatrolPoint.position) < .35f)
-            {
-                if (currentInterObjScript.isAlreadyUsed && !currentInterObjScript.isAlreadyCheck && currentIntObj != null)
-                {
-                    if (!flag_angry)
-                    {
-                            //Здесь она увидела испорченную вещь FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                            //if (rage == maxRage)
-                            //{ //КОНЕЦ ИГРЫ - ВЫ ВЫИГРАЛИ} 
-                            //        Invoke("Win", 2f);
-                            //        //SceneManager.LoadScene("Win");
-                            //    }
-                            //else
-                            //{
-                            //    rage++;
-                            //    rage_slider.value = rage / maxRage;
-                            //    Debug.Log("Make time to angry");
-                            //    mood.sprite = grandmaMood[count_of_mood];
-                            //    count_of_mood++;
-                            //    last_time = Time.time + 4;
-                            //}
-                            rage++;
-                            rage_slider.value = rage / maxRage;
-                            Debug.Log("Make time to angry");
-                            mood.sprite = grandmaMood[count_of_mood];
-                            count_of_mood++;
-                            last_time = Time.time + 4;
-                            if (rage == maxRage)
-                            { //КОНЕЦ ИГРЫ - ВЫ ВЫИГРАЛИ}
-
-                                gamewin.instance.isEndGame();
-                               Invoke("Win", 2f);
-                                //SceneManager.LoadScene("Win");
-                            }
-
-                        }
-                        if (Time.time <= last_time)
-                    {
-                        if (armComp.animation.isPlaying)
-                        {
-                            armComp.animation.Stop("MakeSmtGrandma");
-                            armComp.animation.Stop("WalkGrandma");
-                        }
-                        if (!armComp.animation.isPlaying)
-                        {
-
-                            armComp.animation.Play("AngryGrandma");
-                            AUdio.PlayOneShot(voice[0]);
-                        }
-                        //Add one point of win
-                        flag_angry = true;
-                    }
-                    else
-                    {
-                        AUdio.PlayOneShot(voice[1]);
-                        currentInterObjScript.isAlreadyCheck = true;
-                        currentInterObjScript.changed();
-                        Debug.Log("I alredy check it");
-                        flag_angry = false;
-                    }
-                }
-                else
-                {
-                    if (flag_move == false)
-                    {
-                        last_time = Time.time + 4;
-                    }
-                    if (Time.time <= last_time)
-                    {
-                        //while(Vector3.Distance(transform.position, currentIntObj.transform.position) > 0.35f)
-                        //{
-                        //    transform.Translate(Vector3.up * Time.deltaTime * speed);
-                        //}
-                        ////
-                        Debug.Log("I am doing smth");
-                        if (armComp.animation.isPlaying)
-                        {
-                            armComp.animation.Stop("AngryGrandma");
-                            armComp.animation.Stop("WalkGrandma");
-                        }
-                        if (!armComp.animation.isPlaying)
-                        {
-                            armComp.animation.Play("MakeSmtGrandma");
-                        }
-                        flag_move = true;
-
-                    }
-                    else
-                    {
-                        flag_move = false;
-                        armComp.animation.Play("WalkGrandma");
-                        GoToAnotherPatrol();
-                        Flip();
-                    }
-                }
+                Invoke("Lose", 2f);
+                Debug.Log("GameOver is true");
             }
-            else
-            {
-                Debug.Log("I am moving");
-                //Vector3 patrolPointDir = currentPatrolPoint.position - transform.position;
-                //float angle = Mathf.Atan2(patrolPointDir.y, patrolPointDir.x) * Mathf.Rad2Deg - 90f;
-                //Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-                //transform.rotation = Quaternion.RotateTowards(transform.rotation, q, 180f);
-                transform.Translate(Vector3.right * Time.deltaTime * speed);
-            }
-        }
-
-    }
-        else { //Здесь будет игра окончена
-
-            Invoke("Lose", 2f);
-          //  SceneManager.LoadScene("GameOver");
-            Debug.Log("GameOver is true");
-        }
+        
     }
     void GoToAnotherPatrol()
     {
         if (currentPatrolIndex + 1 < patrolPoints.Length)
         {
-            Debug.Log("The next is !!!!0");
             currentPatrolIndex++;
-            //isFacingRight = false;
         }
         else
         {
-            Debug.Log("The next is 0");
             currentPatrolIndex = 0;
-           // isFacingRight = true;
         }
         currentPatrolPoint = patrolPoints[currentPatrolIndex];
         Debug.Log(currentPatrolIndex.ToString());
@@ -295,9 +275,6 @@ public class GrandmaAI : MonoBehaviour
                 theScale.x *= -1;
                 transform.localScale = theScale;
             }
-            // speed = -speed;
-            //theScale.x *= -1;
-            // transform.localScale = theScale;
         }
         }
   public  void changePos(UnityEngine.Transform a, bool range)

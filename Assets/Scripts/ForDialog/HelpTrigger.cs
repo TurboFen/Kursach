@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HelpTrigger : MonoBehaviour
 {
-    //public string sentence;
     public void Help_Trigger()
     {
         FindObjectOfType<DialogueManager>().EndDialogue();
